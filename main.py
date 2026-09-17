@@ -10,7 +10,7 @@ def find_movie(title: str = ""):
         return Response(content="Error: No title provided", media_type="text/plain")
         
     # Query the vr-m.net search directory endpoint
-    search_url = f"https://vr-m.net{title}"
+    search_url = f"https://vr-m.net/0/s?q={title}"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     
     try:
@@ -41,7 +41,7 @@ def find_movie(title: str = ""):
         if video_url.startswith('//'):
             video_url = 'https:' + video_url
         elif video_url.startswith('/'):
-            video_url = 'https://vr-m.net' + video_url
+            video_url = 'https://vr-m.net/0/s?q=' + video_url
             
         # Output ONLY raw plain text so the VRChat video system reads it natively
         return Response(content=video_url, media_type="text/plain")
