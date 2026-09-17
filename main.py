@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Response
-import requests
 
 app = FastAPI()
 
@@ -8,9 +7,11 @@ def find_movie(title: str = ""):
     if not title:
         return Response(content="Error: No title provided", media_type="text/plain")
     
-    # Clean the input text and direct it straight to vr-m's specific movie search syntax
-    cleaned_title = title.replace(" ", "+")
-    target_link = f"https://vr-m.net{cleaned_title}"
+    # 1. Clean up any accidental spaces the user types
+    cleaned_title = title.strip().replace(" ", "+")
     
-    # We return the target link directly as plain text for ProTV to evaluate 
+    # 2. Build the exact search query format that vr-m.net reads
+    target_link = f"https://vr-m.net/0/s?q={cleaned_title}"
+    
+    # 3. Return it as plain text for VRChat to use
     return Response(content=target_link, media_type="text/plain")
