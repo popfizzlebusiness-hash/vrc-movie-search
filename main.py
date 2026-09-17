@@ -41,7 +41,7 @@ def find_movie(title: str = ""):
         if video_url.startswith('//'):
             video_url = 'https:' + video_url
         elif video_url.startswith('/'):
-            video_url = 'https://vr-m.net/0/s?q=' + video_url
+            video_url = 'https://vr-m.net/' + video_url
             
         # Output ONLY raw plain text so the VRChat video system reads it natively
         return Response(content=video_url, media_type="text/plain")
