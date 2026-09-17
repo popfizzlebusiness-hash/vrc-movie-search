@@ -10,7 +10,7 @@ def find_movie(title: str = ""):
         return Response(content="Error: No title provided", media_type="text/plain")
         
     # Query the vr-m.net search directory endpoint
-    search_url = f"https://vr-m.net/0/s?q={title}"
+    search_url = f"https://vr-m.net/{title}"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     
     try:
