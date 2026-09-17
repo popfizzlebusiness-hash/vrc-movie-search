@@ -1,4 +1,4 @@
-pythonimport requests
+import requests
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, Response
 
