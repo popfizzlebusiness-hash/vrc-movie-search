@@ -50,3 +50,4 @@ async def find_movie(title: str = ""):
     except Exception:
         # Fixed the missing slash right after vr-m.net
         return Response(content=f"https://vr-m.net{cleaned}.mp4", media_type="text/plain")
+        
