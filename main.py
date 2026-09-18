@@ -1,13 +1,13 @@
 from fastapi import FastAPI
-from fastapi.responses import PlainTextResponse
+from starlette.responses import Response
 import requests
 
 app = FastAPI()
 
-@app.get("/search", response_class=PlainTextResponse)
+@app.get("/search")
 def find_movie(title: str = ""):
     if not title:
-        return "Error: No title provided"
+        return Response("Error: No title provided", media_type="text/plain")
     
     cleaned = title.strip().replace(" ", "+")
     target_link = f"https://vr-m.net/?s={cleaned}"
@@ -19,7 +19,11 @@ def find_movie(title: str = ""):
     try:
         check = requests.get(target_link, headers=headers, timeout=5)
         if check.status_code == 404:
-            return f"https://vr-m.net/0/s?q={cleaned}"
-        return target_link
+            output = f"https://vr-m.net/0/s?q={cleaned}"
+        else:
+            output = target_link
     except Exception:
-        return f"https://vr-m.net/?s={cleaned}"
+        output = f"https://vr-m.net/?s={cleaned}"
+
+    # Return raw text bytes directly to completely prevent metadata wrappers
+    return Response(content=str(output), media_type="text/plain")
