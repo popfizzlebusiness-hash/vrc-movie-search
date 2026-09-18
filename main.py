@@ -1,12 +1,13 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 import requests
 
 app = FastAPI()
 
-@app.get("/search")
+@app.get("/search", response_class=PlainTextResponse)
 def find_movie(title: str = ""):
     if not title:
-        return Response(content="Error: No title provided", media_type="text/plain")
+        return "Error: No title provided"
     
     cleaned = title.strip().replace(" ", "+")
     target_link = f"https://vr-m.net/?s={cleaned}"
@@ -18,7 +19,7 @@ def find_movie(title: str = ""):
     try:
         check = requests.get(target_link, headers=headers, timeout=5)
         if check.status_code == 404:
-            return Response(content=f"https://vr-m.net/0/s?q={cleaned}", media_type="text/plain")
-        return Response(content=target_link, media_type="text/plain")
+            return f"https://vr-m.net/0/s?q={cleaned}"
+        return target_link
     except Exception:
-        return Response(content=f"https://vr-m.net/?s={cleaned}", media_type="text/plain")
+        return f"https://vr-m.net/?s={cleaned}"
