@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+pythonfrom fastapi import FastAPI, Response
 import requests
 
 app = FastAPI()
@@ -10,7 +10,7 @@ def find_movie(title: str = ""):
     
     # 1. Format the search string correctly
     cleaned_title = title.strip().replace(" ", "+")
-    target_link = f"https://vr-m.net{cleaned_title}"
+    target_link = f"https://vr-m.net/?s={cleaned_title}"
     
     # 2. Add realistic browser headers so the site doesn't reject us with a 404
     headers = {
@@ -25,7 +25,7 @@ def find_movie(title: str = ""):
         
         # If it returns a 404 anyway, fall back to the root database link directly
         if check.status_code == 404:
-            fallback_link = f"https://vr-m.net{cleaned_title}"
+            fallback_link = f"https://vr-m.net/0/s?q={cleaned_title}"
             return Response(content=fallback_link, media_type="text/plain")
             
         # If the page layout is good, return the valid target link path
@@ -33,5 +33,6 @@ def find_movie(title: str = ""):
         
     except Exception as e:
         # Fallback safeguard layout if a timeout or connection issue occurs
-        safe_fallback = f"https://vr-m.net{cleaned_title}"
+        safe_fallback = f"https://vr-m.net/?s={cleaned_title}"
+        return Response(content=safe_fallback, media_type="text/plain")
         return Response(content=safe_fallback, media_type="text/plain")
